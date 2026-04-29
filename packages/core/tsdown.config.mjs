@@ -1,12 +1,14 @@
-import {defineConfig} from 'tsup'
+import {defineConfig} from 'tsdown'
 
-export default defineConfig({
+const config = defineConfig({
 	entry: ['src/index.ts'],
 	format: ['esm', 'cjs'],
 	dts: false,
 	sourcemap: true,
 	clean: true,
 	target: 'es2020',
-	bundle: false,
+	unbundle: true,
 	outDir: 'dist',
 })
+
+export default config

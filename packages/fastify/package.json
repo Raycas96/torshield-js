@@ -3,12 +3,12 @@
 	"version": "1.0.0",
 	"private": true,
 	"main": "dist/index.cjs",
-	"module": "dist/index.js",
+	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
+			"import": "./dist/index.mjs",
 			"require": "./dist/index.cjs"
 		}
 	},
@@ -23,13 +23,13 @@
 		"fastify-plugin": "^4.5.1"
 	},
 	"scripts": {
-		"build": "tsup && pnpm run build:types",
+		"build": "tsdown && pnpm run build:types",
 		"build:types": "tsc -p tsconfig.types.json",
 		"test": "vitest run --passWithNoTests",
 		"lint": "eslint .",
 		"clean": "rimraf dist"
 	},
 	"devDependencies": {
-		"tsup": "^8.5.1"
+		"tsdown": "^0.21.10"
 	}
 }
