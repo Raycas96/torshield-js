@@ -1,11 +1,11 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
-import {TorDetector} from '../../src/detector.js'
+import {TorDetector} from '@/detector'
 
 const {fetchAllSourcesMock} = vi.hoisted(() => ({
 	fetchAllSourcesMock: vi.fn<(signal?: AbortSignal) => Promise<string[]>>(),
 }))
 
-vi.mock('../../src/fetcher.js', () => ({
+vi.mock('@/fetcher', () => ({
 	fetchAllSources: fetchAllSourcesMock,
 }))
 

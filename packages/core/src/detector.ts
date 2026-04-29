@@ -1,6 +1,6 @@
-import {fetchAllSources} from './fetcher.js'
-import {normalizeIp, parseLines} from './parser.js'
-import {IpStore} from './store.js'
+import {fetchAllSources} from './fetcher'
+import {normalizeIp, parseLines} from './parser'
+import {IpStore} from './store'
 
 export type TorDetectorOptions = {
 	onRefresh?: (count: number) => void

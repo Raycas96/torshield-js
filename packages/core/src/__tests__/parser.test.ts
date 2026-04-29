@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {normalizeIp, parseLines} from '../../src/parser.js'
+import {normalizeIp, parseLines} from '@/parser'
 
 describe('parseLines', () => {
 	it('skips # comment lines', () => {

@@ -1,25 +1,35 @@
 {
-  "name": "@torshield/express",
-  "version": "1.0.0",
-  "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "dependencies": {
-    "@torshield/core": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.6"
-  },
-  "peerDependencies": {
-    "express": ">=4.0.0"
-  },
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "vitest run",
-    "lint": "eslint .",
-    "clean": "rimraf dist"
-  }
+	"name": "@torshield/express",
+	"version": "1.0.0",
+	"private": true,
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"dependencies": {
+		"@torshield/core": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/express": "^5.0.6",
+		"tsup": "^8.5.1"
+	},
+	"peerDependencies": {
+		"express": ">=4.0.0"
+	},
+	"scripts": {
+		"build": "tsup && pnpm run build:types",
+		"build:types": "tsc -p tsconfig.types.json",
+		"test": "vitest run --passWithNoTests",
+		"lint": "eslint .",
+		"clean": "rimraf dist"
+	}
 }

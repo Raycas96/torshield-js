@@ -1,13 +1,12 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"rootDir": "src",
+		"rootDir": "./src",
 		"outDir": "dist",
 		"types": ["node"],
 		"paths": {
-			"@/*": ["./src/*"],
-			"@/parser": ["./parser.js"]
+			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["src", "tests"]
+	"include": ["src", "../vitest.config.ts"]
 }

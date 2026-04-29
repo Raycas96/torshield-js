@@ -1,5 +1,5 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
-import {fetchAllSources} from '../../src/fetcher.js'
+import {fetchAllSources} from '@/fetcher'
 
 afterEach(() => {
 	vi.unstubAllGlobals()

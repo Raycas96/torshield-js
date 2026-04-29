@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {IpStore} from '../../src/store.js'
+import {IpStore} from '@/store'
 
 describe('IpStore', () => {
 	it('swap() updates reference atomically', () => {
