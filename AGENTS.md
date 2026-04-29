@@ -91,6 +91,8 @@ Agent expectation: do not reintroduce those failure modes.
 
 - Unit tests must be hermetic: no real network calls.
 - Avoid tests that rely on timing; prefer fake timers where appropriate.
+- If renaming variables, methods, functions, classes, or options, update all relevant documentation and task-tracking references (`README.md`, `AGENTS.md`, `TODO.private.md`, and related docs) in the same change.
+- Do not rewrite or rename user-authored code just to satisfy documentation consistency unless the user explicitly asks for the code change.
 
 ---
 
@@ -683,10 +685,10 @@ const SOURCES = [
 ]
 
 export async function fetchAllSources(signal?: AbortSignal): Promise<string[]> {
-	const results = await Promise.allSettled(SOURCES.map((url) => fetchSource(url, signal)))
+	const results = await Promise.allSettled(SOURCES.map(url => fetchSource(url, signal)))
 	return results
 		.filter((r): r is PromiseFulfilledResult<string[]> => r.status === 'fulfilled')
-		.flatMap((r) => r.value)
+		.flatMap(r => r.value)
 }
 
 async function fetchSource(url: string, signal?: AbortSignal): Promise<string[]> {
@@ -727,8 +729,8 @@ export class TorDetector {
 		this.options = {
 			refreshIntervalMs: options.refreshIntervalMs ?? 3_600_000,
 			onRefresh:
-				options.onRefresh ?? ((count) => console.log(`[TorShield] ${count} exit nodes loaded.`)),
-			onError: options.onError ?? ((e) => console.warn('[TorShield] Refresh failed:', e)),
+				options.onRefresh ?? (count => console.log(`[TorShield] ${count} exit nodes loaded.`)),
+			onError: options.onError ?? (e => console.warn('[TorShield] Refresh failed:', e)),
 		}
 	}
 

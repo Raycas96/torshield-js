@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {parseLines} from '../../src/parser.js'
+import {normalizeIp, parseLines} from '../../src/parser.js'
 
 describe('parseLines', () => {
 	it('skips # comment lines', () => {
@@ -56,15 +56,22 @@ describe('parseLines', () => {
 		const result = parseLines(lines)
 		expect(result.has('1.2.3.4')).toBe(true)
 		expect(result.has('5.6.7.8')).toBe(true)
-		expect(result.has('::ffff:1.2.3.4')).toBe(true)
-		expect(result.size).toBe(3)
+		expect(result.has('::ffff:1.2.3.4')).toBe(false)
+		expect(result.size).toBe(2)
 	})
 
 	it('handles lines with trailing CR (Windows CRLF)', () => {
 		const lines = [' 9.9.9.9\r', '::ffff:8.8.8.8\r']
 		const result = parseLines(lines)
 		expect(result.has('9.9.9.9')).toBe(true)
-		expect(result.has('::ffff:8.8.8.8')).toBe(true)
+		expect(result.has('8.8.8.8')).toBe(true)
+		expect(result.has('::ffff:8.8.8.8')).toBe(false)
 		expect(result.size).toBe(2)
+	})
+
+	it('normalizeIp trims and strips ::ffff: prefix', () => {
+		expect(normalizeIp(' 1.2.3.4 ')).toBe('1.2.3.4')
+		expect(normalizeIp('::ffff:1.2.3.4')).toBe('1.2.3.4')
+		expect(normalizeIp('  ::ffff:8.8.8.8\t')).toBe('8.8.8.8')
 	})
 })
