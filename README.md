@@ -129,6 +129,20 @@ Current `TorDetector` behavior:
   - `pnpm -F @torshield/core test`
   - `pnpm -F @torshield/express test`
 
+## Dependency Updates (Renovate)
+
+Automated dependency updates are configured via `renovate.json`.
+
+1. Install and enable the [Renovate GitHub App](https://github.com/apps/renovate) for this repository.
+2. Keep reviewers in `.github/CODEOWNERS` aligned with your actual GitHub handle/team.
+3. Review the Dependency Dashboard issue created by Renovate to control grouped updates.
+
+Current policy:
+
+- Major updates are always separated for manual review.
+- Non-major `devDependencies` are grouped to reduce PR noise.
+- Lockfile maintenance runs weekly.
+
 ## License
 
 MIT

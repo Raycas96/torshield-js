@@ -1,0 +1,48 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:recommended",
+		":dependencyDashboard",
+		":semanticCommits",
+		":separateMajorReleases",
+		":automergeDisabled"
+	],
+	"labels": ["dependencies"],
+	"rangeStrategy": "bump",
+	"prConcurrentLimit": 10,
+	"rebaseWhen": "behind-base-branch",
+	"minimumReleaseAge": "3 days",
+	"timezone": "Europe/Rome",
+	"lockFileMaintenance": {
+		"enabled": true,
+		"schedule": ["before 6am on monday"]
+	},
+	"packageRules": [
+		{
+			"description": "Group non-major dev tooling updates",
+			"matchDepTypes": ["devDependencies"],
+			"matchUpdateTypes": ["minor", "patch", "digest"],
+			"groupName": "dev-dependencies (non-major)"
+		},
+		{
+			"description": "Keep major updates separate for manual review",
+			"matchUpdateTypes": ["major"],
+			"automerge": false
+		},
+		{
+			"description": "Group eslint ecosystem",
+			"matchPackageNames": ["eslint", "@eslint/*", "@typescript-eslint/*", "@stylistic/*"],
+			"groupName": "eslint stack"
+		},
+		{
+			"description": "Group vitest ecosystem",
+			"matchPackageNames": ["vitest", "@vitest/*"],
+			"groupName": "vitest stack"
+		},
+		{
+			"description": "Group workspace build tooling",
+			"matchPackageNames": ["turbo", "pnpm", "typescript", "tsup", "tsdown"],
+			"groupName": "workspace build tooling"
+		}
+	]
+}
