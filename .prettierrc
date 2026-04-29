@@ -2,6 +2,7 @@
   "singleQuote": true,
   "semi": false,
   "trailingComma": "all",
+  "arrowParens": "avoid",
   "bracketSpacing": false,
   "useTabs": true,
   "printWidth": 100,

@@ -9,5 +9,5 @@
 			"@/parser": ["./parser.js"]
 		}
 	},
-	"include": ["src"]
+	"include": ["src", "tests"]
 }
