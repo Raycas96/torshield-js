@@ -1,5 +1,7 @@
 # TorShield JS — Node.js / TypeScript Monorepo
 
+![TorShield logo](./assets/logo.png)
+
 Framework adapters + a framework-agnostic core that identifies Tor exit connections.
 
 ## Why TorShield exists
@@ -61,10 +63,10 @@ npm i @torshield/nestjs
 
 ```ts
 import express from 'express'
-import { blockTorExitNodesMiddleware } from '@torshield/express'
+import {blockTorExitNodesMiddleware} from '@torshield/express'
 
 const app = express()
-app.use(blockTorExitNodesMiddleware({ statusCode: 403 }))
+app.use(blockTorExitNodesMiddleware({statusCode: 403}))
 
 app.get('/', (_req, res) => res.send('ok'))
 app.listen(3000)
@@ -77,20 +79,20 @@ import Fastify from 'fastify'
 import torPlugin from '@torshield/fastify'
 
 const app = Fastify()
-app.register(torPlugin, { statusCode: 403 })
+app.register(torPlugin, {statusCode: 403})
 
 app.get('/', async () => 'ok')
-app.listen({ port: 3000 })
+app.listen({port: 3000})
 ```
 
 ### NestJS (module)
 
 ```ts
-import { Module } from '@nestjs/common'
-import { TorModule } from '@torshield/nestjs'
+import {Module} from '@nestjs/common'
+import {TorModule} from '@torshield/nestjs'
 
 @Module({
-  imports: [TorModule.forRoot({ refreshIntervalMs: 60 * 60 * 1000 })],
+	imports: [TorModule.forRoot({refreshIntervalMs: 60 * 60 * 1000})],
 })
 export class AppModule {}
 ```
@@ -233,10 +235,10 @@ npm i @torshield/nestjs
 
 ```ts
 import express from 'express'
-import { blockTorExitNodesMiddleware } from '@torshield/express'
+import {blockTorExitNodesMiddleware} from '@torshield/express'
 
 const app = express()
-app.use(blockTorExitNodesMiddleware({ statusCode: 403 }))
+app.use(blockTorExitNodesMiddleware({statusCode: 403}))
 
 app.get('/', (_req, res) => res.send('ok'))
 app.listen(3000)
@@ -249,20 +251,20 @@ import Fastify from 'fastify'
 import torPlugin from '@torshield/fastify'
 
 const app = Fastify()
-app.register(torPlugin, { statusCode: 403 })
+app.register(torPlugin, {statusCode: 403})
 
 app.get('/', async () => 'ok')
-app.listen({ port: 3000 })
+app.listen({port: 3000})
 ```
 
 ### NestJS (module)
 
 ```ts
-import { Module } from '@nestjs/common'
-import { TorModule } from '@torshield/nestjs'
+import {Module} from '@nestjs/common'
+import {TorModule} from '@torshield/nestjs'
 
 @Module({
-  imports: [TorModule.forRoot({ refreshIntervalMs: 60 * 60 * 1000 })],
+	imports: [TorModule.forRoot({refreshIntervalMs: 60 * 60 * 1000})],
 })
 export class AppModule {}
 ```

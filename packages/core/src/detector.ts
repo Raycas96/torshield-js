@@ -5,6 +5,7 @@ import {IpStore} from './store'
 export type TorDetectorOptions = {
 	onRefresh?: (count: number) => void
 	onError?: (error: unknown) => void
+	verbose?: boolean
 }
 
 /**

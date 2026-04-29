@@ -20,7 +20,11 @@
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.6",
-		"tsup": "^8.5.1"
+		"@types/supertest": "^7.2.0",
+		"express": "^5.2.1",
+		"supertest": "^7.2.2",
+		"tsup": "^8.5.1",
+		"vitest": "4.1.5"
 	},
 	"peerDependencies": {
 		"express": ">=4.0.0"
@@ -28,7 +32,7 @@
 	"scripts": {
 		"build": "tsup && pnpm run build:types",
 		"build:types": "tsc -p tsconfig.types.json",
-		"test": "vitest run --passWithNoTests",
+		"test": "vitest run --config vitest.config.ts",
 		"lint": "eslint .",
 		"clean": "rimraf dist"
 	}
