@@ -18,5 +18,6 @@ export default xoConfig.map(config => ({
 	rules: {
 		...config.rules,
 		'@stylistic/function-paren-newline': 'off',
+		'@stylistic/object-curly-newline': 'off',
 	},
 }))
