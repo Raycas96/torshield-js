@@ -1,6 +1,8 @@
 # TorShield JS — Node.js / TypeScript Monorepo
 
-![TorShield logo](./assets/logo.png)
+<p align="center">
+  <img src="./assets/logo.png" alt="TorShield logo" width="460" />
+</p>
 
 Framework adapters + a framework-agnostic core that identifies Tor exit connections.
 
