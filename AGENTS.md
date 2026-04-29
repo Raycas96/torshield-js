@@ -457,34 +457,34 @@ packages:
 
 ```json
 {
-  "name": "torshield-js",
-  "private": true,
-  "packageManager": "pnpm@9.0.0",
-  "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "test:watch": "turbo run test:watch",
-    "lint": "turbo run lint",
-    "clean": "turbo run clean && rimraf node_modules",
-    "changeset": "changeset",
-    "version-packages": "changeset version",
-    "release": "pnpm build && changeset publish"
-  },
-  "devDependencies": {
-    "@changesets/cli": "^2.27.0",
-    "husky": "^9.0.0",
-    "lint-staged": "^15.0.0",
-    "only-allow": "^1.2.0",
-    "prettier": "^3.0.0",
-    "rimraf": "^5.0.0",
-    "turbo": "^2.0.0",
-    "typescript": "^5.4.0",
-    "vitest": "^1.6.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix", "prettier --write"]
-  }
+	"name": "torshield-js",
+	"private": true,
+	"packageManager": "pnpm@9.0.0",
+	"scripts": {
+		"preinstall": "npx only-allow pnpm",
+		"build": "turbo run build",
+		"test": "turbo run test",
+		"test:watch": "turbo run test:watch",
+		"lint": "turbo run lint",
+		"clean": "turbo run clean && rimraf node_modules",
+		"changeset": "changeset",
+		"version-packages": "changeset version",
+		"release": "pnpm build && changeset publish"
+	},
+	"devDependencies": {
+		"@changesets/cli": "^2.27.0",
+		"husky": "^9.0.0",
+		"lint-staged": "^15.0.0",
+		"only-allow": "^1.2.0",
+		"prettier": "^3.0.0",
+		"rimraf": "^5.0.0",
+		"turbo": "^2.0.0",
+		"typescript": "^5.4.0",
+		"vitest": "^1.6.0"
+	},
+	"lint-staged": {
+		"*.{ts,tsx}": ["eslint --fix", "prettier --write"]
+	}
 }
 ```
 
@@ -492,29 +492,29 @@ packages:
 
 ```json
 {
-  "$schema": "https://turbo.build/schema.json",
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
-    },
-    "test": {
-      "dependsOn": ["build"],
-      "outputs": []
-    },
-    "test:watch": {
-      "dependsOn": ["build"],
-      "cache": false,
-      "persistent": true,
-      "outputs": []
-    },
-    "lint": {
-      "outputs": []
-    },
-    "clean": {
-      "cache": false
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**"]
+		},
+		"test": {
+			"dependsOn": ["build"],
+			"outputs": []
+		},
+		"test:watch": {
+			"dependsOn": ["build"],
+			"cache": false,
+			"persistent": true,
+			"outputs": []
+		},
+		"lint": {
+			"outputs": []
+		},
+		"clean": {
+			"cache": false
+		}
+	}
 }
 ```
 
@@ -522,17 +522,17 @@ packages:
 
 ```json
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "lib": ["ES2020"],
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "CommonJS",
+		"lib": ["ES2020"],
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true
+	}
 }
 ```
 
@@ -540,15 +540,15 @@ packages:
 
 ```json
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
-  "fixed": [],
-  "linked": [],
-  "access": "public",
-  "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": []
+	"$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+	"changelog": "@changesets/cli/changelog",
+	"commit": false,
+	"fixed": [],
+	"linked": [],
+	"access": "public",
+	"baseBranch": "main",
+	"updateInternalDependencies": "patch",
+	"ignore": []
 }
 ```
 
@@ -640,16 +640,16 @@ const IPV4_REGEX = /^(\d{1,3}\.){3}\d{1,3}$/
 const IPV6_REGEX = /^[0-9a-fA-F:]+$/
 
 export function parseLines(lines: string[]): Set<string> {
-  const ips = new Set<string>()
-  for (const line of lines) {
-    const trimmed = line.trim()
-    // Skip comments, empty lines, and non-IP lines
-    if (!trimmed || trimmed.startsWith('#')) continue
-    if (IPV4_REGEX.test(trimmed) || IPV6_REGEX.test(trimmed)) {
-      ips.add(trimmed)
-    }
-  }
-  return ips
+	const ips = new Set<string>()
+	for (const line of lines) {
+		const trimmed = line.trim()
+		// Skip comments, empty lines, and non-IP lines
+		if (!trimmed || trimmed.startsWith('#')) continue
+		if (IPV4_REGEX.test(trimmed) || IPV6_REGEX.test(trimmed)) {
+			ips.add(trimmed)
+		}
+	}
+	return ips
 }
 ```
 
@@ -657,19 +657,19 @@ export function parseLines(lines: string[]): Set<string> {
 
 ```typescript
 export class IpStore {
-  private set: Set<string> = new Set()
+	private set: Set<string> = new Set()
 
-  swap(newSet: Set<string>): void {
-    this.set = newSet
-  }
+	swap(newSet: Set<string>): void {
+		this.set = newSet
+	}
 
-  has(ip: string): boolean {
-    return this.set.has(ip)
-  }
+	has(ip: string): boolean {
+		return this.set.has(ip)
+	}
 
-  size(): number {
-    return this.set.size
-  }
+	size(): number {
+		return this.set.size
+	}
 }
 ```
 
@@ -677,99 +677,99 @@ export class IpStore {
 
 ```typescript
 const SOURCES = [
-  'https://check.torproject.org/torbulkexitlist',
-  'https://raw.githubusercontent.com/SecOps-Institute/Tor-IP-Addresses/master/tor-exit-nodes.lst',
-  'https://www.dan.me.uk/torlist/?exit',
+	'https://check.torproject.org/torbulkexitlist',
+	'https://raw.githubusercontent.com/SecOps-Institute/Tor-IP-Addresses/master/tor-exit-nodes.lst',
+	'https://www.dan.me.uk/torlist/?exit',
 ]
 
 export async function fetchAllSources(signal?: AbortSignal): Promise<string[]> {
-  const results = await Promise.allSettled(SOURCES.map((url) => fetchSource(url, signal)))
-  return results
-    .filter((r): r is PromiseFulfilledResult<string[]> => r.status === 'fulfilled')
-    .flatMap((r) => r.value)
+	const results = await Promise.allSettled(SOURCES.map((url) => fetchSource(url, signal)))
+	return results
+		.filter((r): r is PromiseFulfilledResult<string[]> => r.status === 'fulfilled')
+		.flatMap((r) => r.value)
 }
 
 async function fetchSource(url: string, signal?: AbortSignal): Promise<string[]> {
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 10_000)
-  try {
-    const response = await fetch(url, { signal: signal ?? controller.signal })
-    clearTimeout(timeout)
-    if (!response.ok) throw new Error(`HTTP ${response.status} from ${url}`)
-    const text = await response.text()
-    return text.split('\n')
-  } catch (e) {
-    clearTimeout(timeout)
-    throw e
-  }
+	const controller = new AbortController()
+	const timeout = setTimeout(() => controller.abort(), 10_000)
+	try {
+		const response = await fetch(url, {signal: signal ?? controller.signal})
+		clearTimeout(timeout)
+		if (!response.ok) throw new Error(`HTTP ${response.status} from ${url}`)
+		const text = await response.text()
+		return text.split('\n')
+	} catch (e) {
+		clearTimeout(timeout)
+		throw e
+	}
 }
 ```
 
 #### `packages/core/src/detector.ts`
 
 ```typescript
-import { fetchAllSources } from './fetcher'
-import { parseLines } from './parser'
-import { IpStore } from './store'
+import {fetchAllSources} from './fetcher'
+import {parseLines} from './parser'
+import {IpStore} from './store'
 
 export interface TorDetectorOptions {
-  refreshIntervalMs?: number
-  onRefresh?: (count: number) => void
-  onError?: (error: unknown) => void
+	refreshIntervalMs?: number
+	onRefresh?: (count: number) => void
+	onError?: (error: unknown) => void
 }
 
 export class TorDetector {
-  private readonly store = new IpStore()
-  private intervalId?: NodeJS.Timeout
-  private readonly options: Required<TorDetectorOptions>
+	private readonly store = new IpStore()
+	private intervalId?: NodeJS.Timeout
+	private readonly options: Required<TorDetectorOptions>
 
-  constructor(options: TorDetectorOptions = {}) {
-    this.options = {
-      refreshIntervalMs: options.refreshIntervalMs ?? 3_600_000,
-      onRefresh:
-        options.onRefresh ?? ((count) => console.log(`[TorShield] ${count} exit nodes loaded.`)),
-      onError: options.onError ?? ((e) => console.warn('[TorShield] Refresh failed:', e)),
-    }
-  }
+	constructor(options: TorDetectorOptions = {}) {
+		this.options = {
+			refreshIntervalMs: options.refreshIntervalMs ?? 3_600_000,
+			onRefresh:
+				options.onRefresh ?? ((count) => console.log(`[TorShield] ${count} exit nodes loaded.`)),
+			onError: options.onError ?? ((e) => console.warn('[TorShield] Refresh failed:', e)),
+		}
+	}
 
-  async start(): Promise<void> {
-    await this.refresh()
-    this.intervalId = setInterval(() => this.refresh(), this.options.refreshIntervalMs)
-    // Prevent the background timer from blocking process exit
-    this.intervalId.unref()
-  }
+	async start(): Promise<void> {
+		await this.refresh()
+		this.intervalId = setInterval(() => this.refresh(), this.options.refreshIntervalMs)
+		// Prevent the background timer from blocking process exit
+		this.intervalId.unref()
+	}
 
-  destroy(): void {
-    if (this.intervalId) clearInterval(this.intervalId)
-  }
+	destroy(): void {
+		if (this.intervalId) clearInterval(this.intervalId)
+	}
 
-  isTor(ip: string): boolean {
-    const normalized = ip.replace(/^::ffff:/, '').trim()
-    return this.store.has(normalized)
-  }
+	isTor(ip: string): boolean {
+		const normalized = ip.replace(/^::ffff:/, '').trim()
+		return this.store.has(normalized)
+	}
 
-  get nodeCount(): number {
-    return this.store.size()
-  }
+	get nodeCount(): number {
+		return this.store.size()
+	}
 
-  private async refresh(): Promise<void> {
-    try {
-      const lines = await fetchAllSources()
-      const parsed = parseLines(lines)
-      this.store.swap(parsed)
-      this.options.onRefresh(parsed.size)
-    } catch (e) {
-      this.options.onError(e)
-    }
-  }
+	private async refresh(): Promise<void> {
+		try {
+			const lines = await fetchAllSources()
+			const parsed = parseLines(lines)
+			this.store.swap(parsed)
+			this.options.onRefresh(parsed.size)
+		} catch (e) {
+			this.options.onError(e)
+		}
+	}
 }
 ```
 
 #### `packages/core/src/index.ts`
 
 ```typescript
-export { TorDetector } from './detector'
-export type { TorDetectorOptions } from './detector'
+export {TorDetector} from './detector'
+export type {TorDetectorOptions} from './detector'
 ```
 
 ---
@@ -779,34 +779,34 @@ export type { TorDetectorOptions } from './detector'
 #### `packages/express/src/index.ts`
 
 ```typescript
-import { TorDetector, TorDetectorOptions } from '@torshield/core'
-import { Request, Response, NextFunction } from 'express'
+import {TorDetector, TorDetectorOptions} from '@torshield/core'
+import {Request, Response, NextFunction} from 'express'
 
 export interface TorMiddlewareOptions extends TorDetectorOptions {
-  message?: string
-  statusCode?: number
+	message?: string
+	statusCode?: number
 }
 
 export function blockTorExitNodesMiddleware(options: TorMiddlewareOptions = {}) {
-  const detector = new TorDetector(options)
-  detector.start() // Non-blocking for Express
+	const detector = new TorDetector(options)
+	detector.start() // Non-blocking for Express
 
-  const statusCode = options.statusCode ?? 403
-  const message = options.message ?? 'Access denied: Tor connections are not permitted.'
+	const statusCode = options.statusCode ?? 403
+	const message = options.message ?? 'Access denied: Tor connections are not permitted.'
 
-  return (req: Request, res: Response, next: NextFunction): void => {
-    const forwarded = req.headers['x-forwarded-for']
-    const raw = Array.isArray(forwarded)
-      ? forwarded[0]
-      : (forwarded?.split(',')[0] ?? req.socket.remoteAddress ?? '')
-    const ip = raw.trim()
+	return (req: Request, res: Response, next: NextFunction): void => {
+		const forwarded = req.headers['x-forwarded-for']
+		const raw = Array.isArray(forwarded)
+			? forwarded[0]
+			: (forwarded?.split(',')[0] ?? req.socket.remoteAddress ?? '')
+		const ip = raw.trim()
 
-    if (detector.isTor(ip)) {
-      res.status(statusCode).json({ error: message })
-      return
-    }
-    next()
-  }
+		if (detector.isTor(ip)) {
+			res.status(statusCode).json({error: message})
+			return
+		}
+		next()
+	}
 }
 ```
 
@@ -818,38 +818,38 @@ export function blockTorExitNodesMiddleware(options: TorMiddlewareOptions = {}) 
 
 ```typescript
 import fp from 'fastify-plugin'
-import { FastifyPluginAsync } from 'fastify'
-import { TorDetector, TorDetectorOptions } from '@torshield/core'
+import {FastifyPluginAsync} from 'fastify'
+import {TorDetector, TorDetectorOptions} from '@torshield/core'
 
 export interface TorFastifyOptions extends TorDetectorOptions {
-  message?: string
-  statusCode?: number
+	message?: string
+	statusCode?: number
 }
 
 const torPlugin: FastifyPluginAsync<TorFastifyOptions> = async (fastify, options) => {
-  const detector = new TorDetector(options)
+	const detector = new TorDetector(options)
 
-  // Await initial fetch so fastify.ready() guarantees the list is loaded.
-  await detector.start()
+	// Await initial fetch so fastify.ready() guarantees the list is loaded.
+	await detector.start()
 
-  fastify.addHook('onRequest', async (request, reply) => {
-    if (detector.isTor(request.ip)) {
-      reply.code(options.statusCode ?? 403).send({
-        error: options.message ?? 'Access denied: Tor connections are not permitted.',
-      })
-    }
-  })
+	fastify.addHook('onRequest', async (request, reply) => {
+		if (detector.isTor(request.ip)) {
+			reply.code(options.statusCode ?? 403).send({
+				error: options.message ?? 'Access denied: Tor connections are not permitted.',
+			})
+		}
+	})
 
-  fastify.decorate('torDetector', detector)
+	fastify.decorate('torDetector', detector)
 
-  fastify.addHook('onClose', async () => {
-    detector.destroy()
-  })
+	fastify.addHook('onClose', async () => {
+		detector.destroy()
+	})
 }
 
 export default fp(torPlugin, {
-  name: '@torshield/fastify',
-  fastify: '>=4.0.0',
+	name: '@torshield/fastify',
+	fastify: '>=4.0.0',
 })
 ```
 
@@ -866,93 +866,87 @@ export const TOR_DETECTOR_TOKEN = Symbol('TOR_DETECTOR_TOKEN')
 #### `packages/nestjs/src/tor.guard.ts`
 
 ```typescript
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Inject,
-} from '@nestjs/common'
-import { TorDetector } from '@torshield/core'
-import { TOR_DETECTOR_TOKEN } from './tokens'
+import {Injectable, CanActivate, ExecutionContext, ForbiddenException, Inject} from '@nestjs/common'
+import {TorDetector} from '@torshield/core'
+import {TOR_DETECTOR_TOKEN} from './tokens'
 
 @Injectable()
 export class TorGuard implements CanActivate {
-  constructor(@Inject(TOR_DETECTOR_TOKEN) private readonly detector: TorDetector) {}
+	constructor(@Inject(TOR_DETECTOR_TOKEN) private readonly detector: TorDetector) {}
 
-  canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest()
-    const forwarded = request.headers['x-forwarded-for']
-    const raw = Array.isArray(forwarded)
-      ? forwarded[0]
-      : (forwarded?.split(',')[0] ?? request.socket?.remoteAddress ?? '')
-    const ip = raw.trim()
+	canActivate(context: ExecutionContext): boolean {
+		const request = context.switchToHttp().getRequest()
+		const forwarded = request.headers['x-forwarded-for']
+		const raw = Array.isArray(forwarded)
+			? forwarded[0]
+			: (forwarded?.split(',')[0] ?? request.socket?.remoteAddress ?? '')
+		const ip = raw.trim()
 
-    if (this.detector.isTor(ip)) {
-      throw new ForbiddenException('Access denied: Tor connections are not permitted.')
-    }
-    return true
-  }
+		if (this.detector.isTor(ip)) {
+			throw new ForbiddenException('Access denied: Tor connections are not permitted.')
+		}
+		return true
+	}
 }
 ```
 
 #### `packages/nestjs/src/tor.module.ts`
 
 ```typescript
-import { Module, DynamicModule } from '@nestjs/common'
-import { APP_GUARD } from '@nestjs/core'
-import { TorDetector, TorDetectorOptions } from '@torshield/core'
-import { TorGuard } from './tor.guard'
-import { TOR_DETECTOR_TOKEN } from './tokens'
+import {Module, DynamicModule} from '@nestjs/common'
+import {APP_GUARD} from '@nestjs/core'
+import {TorDetector, TorDetectorOptions} from '@torshield/core'
+import {TorGuard} from './tor.guard'
+import {TOR_DETECTOR_TOKEN} from './tokens'
 
 @Module({})
 export class TorModule {
-  static forRoot(options: TorDetectorOptions = {}): DynamicModule {
-    return {
-      module: TorModule,
-      global: true,
-      providers: [
-        {
-          provide: TOR_DETECTOR_TOKEN,
-          useFactory: async () => {
-            const detector = new TorDetector(options)
-            await detector.start()
-            return detector
-          },
-        },
-        TorGuard,
-        { provide: APP_GUARD, useClass: TorGuard },
-      ],
-      exports: [TorGuard, TOR_DETECTOR_TOKEN],
-    }
-  }
+	static forRoot(options: TorDetectorOptions = {}): DynamicModule {
+		return {
+			module: TorModule,
+			global: true,
+			providers: [
+				{
+					provide: TOR_DETECTOR_TOKEN,
+					useFactory: async () => {
+						const detector = new TorDetector(options)
+						await detector.start()
+						return detector
+					},
+				},
+				TorGuard,
+				{provide: APP_GUARD, useClass: TorGuard},
+			],
+			exports: [TorGuard, TOR_DETECTOR_TOKEN],
+		}
+	}
 
-  static forFeature(options: TorDetectorOptions = {}): DynamicModule {
-    return {
-      module: TorModule,
-      providers: [
-        {
-          provide: TOR_DETECTOR_TOKEN,
-          useFactory: async () => {
-            const detector = new TorDetector(options)
-            await detector.start()
-            return detector
-          },
-        },
-        TorGuard,
-      ],
-      exports: [TorGuard],
-    }
-  }
+	static forFeature(options: TorDetectorOptions = {}): DynamicModule {
+		return {
+			module: TorModule,
+			providers: [
+				{
+					provide: TOR_DETECTOR_TOKEN,
+					useFactory: async () => {
+						const detector = new TorDetector(options)
+						await detector.start()
+						return detector
+					},
+				},
+				TorGuard,
+			],
+			exports: [TorGuard],
+		}
+	}
 }
 ```
 
 #### `packages/nestjs/src/index.ts`
 
 ```typescript
-export { TorGuard } from './tor.guard'
-export { TorModule } from './tor.module'
-export { TOR_DETECTOR_TOKEN } from './tokens'
+export {TorGuard} from './tor.guard'
+export {TorModule} from './tor.module'
+export {TOR_DETECTOR_TOKEN} from './tokens'
 ```
 
 ---
