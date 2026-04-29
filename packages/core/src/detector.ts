@@ -1,14 +1,14 @@
+import {IpStore} from './store.js'
+
 export type TorDetectorOptions = {
 	refreshIntervalMs?: number
 	onRefresh?: (count: number) => void
 	onError?: (error: unknown) => void
 }
 
-// Placeholder implementation so the package can compile.
-// Real implementation will follow the contracts in AGENTS.md.
 export class TorDetector {
 	private readonly options: TorDetectorOptions
-	private readonly store = new Set<string>()
+	private readonly store = new IpStore()
 
 	constructor(options: TorDetectorOptions = {}) {
 		this.options = options
@@ -16,19 +16,18 @@ export class TorDetector {
 
 	async start(): Promise<void> {
 		// Placeholder to keep behavior non-empty until the real refresh loop is implemented.
-		this.options.onRefresh?.(this.store.size)
+		this.options.onRefresh?.(this.store.size())
 	}
 
 	destroy(): void {
-		// Placeholder no-op cleanup.
-		this.store.clear()
+		this.store.swap(new Set())
 	}
 
-	isTor(_ip: string): boolean {
-		return false
+	isTorNode(ip: string): boolean {
+		return this.store.has(ip)
 	}
 
 	get nodeCount(): number {
-		return this.store.size
+		return this.store.size()
 	}
 }
