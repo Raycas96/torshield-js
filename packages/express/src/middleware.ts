@@ -1,16 +1,24 @@
 import type {NextFunction, Request, Response} from 'express'
 import {getDetector} from './detector-init'
 import {defaultErrorMessage} from './constants'
+import type {TorExitNodeMiddlewareOptions} from './types'
 
 export function blockTorExitNodesMiddleware() {
 	const detectorContext = getDetector()
-	const statusCode = detectorContext.detectorOptions.statusCode ?? 403
-	const message = detectorContext.detectorOptions.message ?? defaultErrorMessage
+	const {
+		statusCode = 403,
+		message = defaultErrorMessage,
+		onTorDetected,
+	}: TorExitNodeMiddlewareOptions = detectorContext.detectorOptions
 
-	return (request: Request, response: Response, next: NextFunction) => {
-		const clientIp = getClientIp(request)
-		if (!clientIp || !detectorContext.detector.isTorNode(clientIp)) {
+	return async (request: Request, response: Response, next: NextFunction) => {
+		if (!isTorRequest(request)) {
 			next()
+			return
+		}
+
+		if (typeof onTorDetected === 'function') {
+			await invokeOnTorDetected(onTorDetected, request, response, next)
 			return
 		}
 
@@ -18,21 +26,35 @@ export function blockTorExitNodesMiddleware() {
 	}
 }
 
+async function invokeOnTorDetected(
+	onTorDetected: NonNullable<TorExitNodeMiddlewareOptions['onTorDetected']>,
+	request: Request,
+	response: Response,
+	next: NextFunction,
+): Promise<void> {
+	await onTorDetected(request, response, next)
+}
+
 export const executeCustomActionOnTorNodeDetection = (
 	request: Request,
 	next: NextFunction,
 	action: () => void,
 ) => {
-	const detectorContext = getDetector()
-	const clientIp = getClientIp(request)
-	if (!clientIp || !detectorContext.detector.isTorNode(clientIp)) {
-		next()
-	} else {
+	if (isTorRequest(request)) {
 		action()
+		return
 	}
+
+	next()
 }
 
-function getClientIp(request: Request): string {
+const isTorRequest = (request: Request): boolean => {
+	const detectorContext = getDetector()
+	const clientIp = getClientIp(request)
+	return Boolean(clientIp && detectorContext.detector.isTorNode(clientIp))
+}
+
+const getClientIp = (request: Request): string => {
 	const forwardedFor = request.headers['x-forwarded-for']
 
 	if (typeof forwardedFor === 'string') {
@@ -46,7 +68,7 @@ function getClientIp(request: Request): string {
 	return request.socket.remoteAddress?.trim() ?? ''
 }
 
-function getLeftMostIp(headerValue: string): string {
+const getLeftMostIp = (headerValue: string): string => {
 	const leftMostValue = headerValue.split(',')[0] ?? ''
 	return leftMostValue.trim()
 }

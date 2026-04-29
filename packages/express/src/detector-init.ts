@@ -31,7 +31,7 @@ export const getDetector = (): DetectorContext => {
 	return detectorContext
 }
 
-export function resetDetectorForTests(): void {
+export function destroyDetector(): void {
 	detectorContext = undefined
 	hasStartedDetector = false
 }

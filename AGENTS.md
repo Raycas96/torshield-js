@@ -275,18 +275,22 @@ Requirements:
 
 - `initializeDetector(options?)` initializes the singleton detector and must be called during app bootstrap.
 - `blockTorExitNodesMiddleware()` returns an Express middleware function and reads options from the initialized singleton context.
+- Express options are fixed on first detector initialization and reused for lifecycle.
 - Must parse `x-forwarded-for`:
   - if header is missing, fall back to `req.socket.remoteAddress`
   - if header has multiple values, use the leftmost entry
   - handle header as string, string array, or missing
 - Must deny Tor IPs with `statusCode` and JSON `{ error }`.
+- Must support custom Tor handling via options override callback (`onTorDetected`) in middleware path.
 - Detector must be started once and reused across middleware instances.
 
 ### 8.2 Fastify (`@torshield/fastify`)
 
 - Expose a Fastify plugin (via `fastify-plugin`).
-- Must `await detector.start()` so the first request sees a populated list (at least best-effort).
+- Must `await detector.start()` so `fastify.ready()` sees a populated list (at least best-effort).
+- Detector initialization/options are singleton-lifecycle and must reject conflicting re-initialization options.
 - Must add `onRequest` hook to deny Tor IPs.
+- Must support custom Tor handling via plugin option callback (`onTorDetected`).
 - Must decorate the instance for testing:
   - `fastify.decorate('torDetector', detector)`
 - Must destroy the detector on server close.
@@ -294,12 +298,13 @@ Requirements:
 ### 8.3 NestJS (`@torshield/nestjs`)
 
 - Provide:
-  - `TOR_DETECTOR_TOKEN` (injection token)
+  - `torDetectorToken` (injection token)
   - `TorGuard` (`CanActivate`)
   - `TorModule` with:
     - `forRoot(options?)`: registers a global guard
     - `forFeature(options?)`: registers a non-global guard for per-controller usage
 - Must ensure module initialization awaits the first `detector.start()` so guards have data loaded.
+- NestJS detector initialization is singleton-lifecycle and must reject conflicting re-initialization options.
 
 ---
 

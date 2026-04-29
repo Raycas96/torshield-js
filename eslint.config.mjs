@@ -20,6 +20,7 @@ export default xoConfig.map(config => ({
 		'import-x/extensions': 'off',
 		'@stylistic/function-paren-newline': 'off',
 		'@stylistic/object-curly-newline': 'off',
+		'@stylistic/operator-linebreak': 'off',
 	},
 	ignores: [
 		'**/*/dist',

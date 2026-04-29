@@ -22,19 +22,16 @@
 - Fail-safe startup/refresh behavior (service keeps running if sources fail).
 - Framework adapters on top of a shared core detector.
 
-## Project Status
-
-- `@torshield/core`: implemented
-- `@torshield/express`: implemented
-- `@torshield/fastify`: scaffolded (WIP)
-- `@torshield/nestjs`: scaffolded (WIP)
-
 ## Packages
 
 - `@torshield/core`  
   Core detector (`TorDetector`) and primitives.
 - `@torshield/express`  
   Express adapter with explicit singleton initialization.
+- `@torshield/fastify`  
+  Fastify plugin with shared detector initialization and startup readiness.
+- `@torshield/nestjs`  
+  NestJS guard/module integration with async singleton detector initialization and guard override support.
 
 ## Install
 
@@ -46,6 +43,14 @@ npm i @torshield/core
 
 ```bash
 npm i @torshield/express express
+```
+
+```bash
+npm i @torshield/fastify fastify fastify-plugin
+```
+
+```bash
+npm i @torshield/nestjs @nestjs/common @nestjs/core
 ```
 
 ## Quick Start (Express)
@@ -114,6 +119,7 @@ Current `TorDetector` behavior:
 - No per-request HTTP calls.
 - Refresh failures trigger callbacks; they do not crash the app.
 - Behind proxies, enable `app.set('trust proxy', true)` for accurate client IP extraction.
+- Adapter detector options are set on first initialization and reused for the lifecycle.
 
 ## Contributing
 

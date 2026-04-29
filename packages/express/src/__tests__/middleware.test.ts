@@ -2,7 +2,7 @@ import express from 'express'
 import request from 'supertest'
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
 import {blockTorExitNodesMiddleware} from '../index'
-import {initializeDetector, resetDetectorForTests} from '../detector-init'
+import {destroyDetector, initializeDetector} from '../detector-init'
 
 const detectorState = vi.hoisted(() => ({
 	start: vi.fn<() => Promise<void>>(),
@@ -19,7 +19,7 @@ vi.mock('@torshield/core', () => ({
 
 describe('blockTorExitNodesMiddleware', () => {
 	beforeEach(() => {
-		resetDetectorForTests()
+		destroyDetector()
 		detectorState.start.mockReset()
 		detectorState.isTorNode.mockReset()
 		detectorState.start.mockResolvedValue(undefined)
@@ -27,6 +27,7 @@ describe('blockTorExitNodesMiddleware', () => {
 	})
 
 	afterEach(() => {
+		destroyDetector()
 		vi.restoreAllMocks()
 	})
 
@@ -82,6 +83,27 @@ describe('blockTorExitNodesMiddleware', () => {
 
 		expect(response.status).toBe(451)
 		expect(response.body).toEqual({error: 'Blocked by policy'})
+	})
+
+	it('executes custom action override when Tor IP is detected', async () => {
+		detectorState.isTorNode.mockReturnValue(true)
+		const onTorDetected = vi.fn(
+			(
+				_request: unknown,
+				response: {status: (code: number) => {json: (payload: Record<string, unknown>) => void}},
+			) => {
+				response.status(429).json({error: 'custom-handler'})
+			},
+		)
+		const serverInstance = buildExpressServer({onTorDetected})
+
+		const response = await request(serverInstance)
+			.get('/resource')
+			.set('x-forwarded-for', '1.2.3.4')
+
+		expect(onTorDetected).toHaveBeenCalledTimes(1)
+		expect(response.status).toBe(429)
+		expect(response.body).toEqual({error: 'custom-handler'})
 	})
 
 	it('uses leftmost value from x-forwarded-for', async () => {

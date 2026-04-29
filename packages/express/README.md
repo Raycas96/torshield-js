@@ -58,6 +58,7 @@ Returns Express middleware that:
 - checks Tor membership via `@torshield/core`
 - calls `next()` for allowed traffic
 - responds with `statusCode` and `{error: message}` for blocked traffic
+- if `onTorDetected` is provided, it is called instead of the default deny response
 
 Detector options type:
 
@@ -67,6 +68,7 @@ Detector options type:
 type TorExitNodeMiddlewareOptions = {
 	statusCode?: number
 	message?: string
+	onTorDetected?: (request: Request, response: Response, next: NextFunction) => void | Promise<void>
 	onRefresh?: (count: number) => void
 	onError?: (error: unknown) => void
 	verbose?: boolean
