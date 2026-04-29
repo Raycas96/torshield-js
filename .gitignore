@@ -1,0 +1,47 @@
+node_modules
+
+# Build output
+dist
+build
+
+# Package manager caches
+.pnpm-store
+
+# Turborepo
+.turbo
+
+# Changesets should be committed; ignore their local generated artifacts (if any)
+.changeset
+
+# ESLint / TypeScript / IDE
+.eslintcache
+*.tsbuildinfo
+
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Coverage / test artifacts
+coverage
+.nyc_output
+
+# OS
+.DS_Store
+
+TODO.private.md
+

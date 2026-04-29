@@ -1,0 +1,25 @@
+{
+  "name": "@torshield/express",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@torshield/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  },
+  "peerDependencies": {
+    "express": ">=4.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "clean": "rimraf dist"
+  }
+}
