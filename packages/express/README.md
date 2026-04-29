@@ -1,24 +1,32 @@
 # @torshield/express
 
 <p align="center">
-  <img src="./assets/logo.png" alt="TorShield logo" width="420" />
+  <img src="./assets/logo.png" alt="TorShield logo" width="360" />
 </p>
 
-Express middleware for blocking requests coming from Tor exit nodes.
+<p align="center">
+  Express middleware adapter for blocking Tor exit-node traffic.
+</p>
 
-## Installation
+<p align="center">
+  <img alt="Express" src="https://img.shields.io/badge/Express-%3E%3D4-000000.svg" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-Ready-3178C6.svg" />
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" />
+</p>
+
+## Install
 
 ```bash
 pnpm add @torshield/express express
 ```
 
-## Usage
+## Quick Start
 
-Initialize the detector first, then register the middleware.
+Initialize detector once during app bootstrap, then register the middleware.
 
 ```ts
 import express from 'express'
-import {blockTorExitNodesMiddleware, initializeDetector} from '@torshield/express'
+import {initializeDetector, blockTorExitNodesMiddleware} from '@torshield/express'
 
 const app = express()
 
@@ -27,6 +35,7 @@ initializeDetector({
 	message: 'Access denied: Tor exit node traffic is not allowed.',
 })
 
+app.set('trust proxy', true)
 app.use(blockTorExitNodesMiddleware())
 
 app.get('/health', (_req, res) => {
@@ -38,51 +47,55 @@ app.get('/health', (_req, res) => {
 
 ### `initializeDetector(options?)`
 
-Initializes and starts the singleton detector instance. Call this once during app bootstrapping before registering middleware.
+Creates (once) and starts the singleton detector used by this package.  
+Call this before `blockTorExitNodesMiddleware()`.
 
 ### `blockTorExitNodesMiddleware()`
 
-Creates an Express middleware that:
+Returns Express middleware that:
 
-- Extracts client IP from `x-forwarded-for` (left-most value) or socket address.
-- Checks if the IP is a Tor exit node using `@torshield/core`.
-- Calls `next()` for allowed requests.
-- Returns a JSON error for blocked requests.
+- extracts the client IP from `x-forwarded-for` (left-most value) or socket address
+- checks Tor membership via `@torshield/core`
+- calls `next()` for allowed traffic
+- responds with `statusCode` and `{error: message}` for blocked traffic
 
 Detector options type:
+
+<!-- docs-sync:express-options:start -->
 
 ```ts
 type TorExitNodeMiddlewareOptions = {
 	statusCode?: number
 	message?: string
-	verbose?: boolean
 	onRefresh?: (count: number) => void
 	onError?: (error: unknown) => void
+	verbose?: boolean
 }
 ```
 
+<!-- docs-sync:express-options:end -->
+
 Default values:
 
+<!-- docs-sync:express-defaults:start -->
+
 - `statusCode`: `403`
-- `message`: `'Access denied: Tor exit node traffic is not allowed.'`
-- `verbose`: `false`
+- `message`: `Access denied: Tor exit node traffic is not allowed.`
+<!-- docs-sync:express-defaults:end -->
 
-## Notes
+## Behavior Notes
 
-- The underlying detector instance is initialized once and reused (singleton behavior).
-- `blockTorExitNodesMiddleware()` requires `initializeDetector(...)` to be called first.
-- Tor exit node data refresh runs in the background and updates every 24 hours.
-- The middleware is fail-open during startup/refresh errors: it does not block requests unless an IP is positively detected as a Tor exit node.
+- Singleton detector instance is reused across middleware registrations.
+- Middleware requires prior initialization (`initializeDetector(...)`).
+- Refresh loop runs in background every 24 hours.
+- Startup/refresh failures are fail-open (no hard crash).
 
-## Behind Reverse Proxies
+## Reverse Proxy Setup
 
-If your app runs behind a load balancer, ingress, or reverse proxy (for example Nginx, AWS ALB, or Cloudflare), enable Express trust proxy so client IP resolution is correct:
+When running behind Nginx, Cloudflare, ingress, or ALB, enable trust proxy:
 
 ```ts
-import express from 'express'
-
-const app = express()
 app.set('trust proxy', true)
 ```
 
-Without this, Express may use the proxy IP instead of the real client IP, which can lead to incorrect Tor detection decisions.
+Without this, the adapter may receive proxy IPs instead of real client IPs.

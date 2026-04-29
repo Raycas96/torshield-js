@@ -10,6 +10,7 @@
 		"test:watch": "turbo run test:watch",
 		"lint": "turbo run lint",
 		"clean": "turbo run clean",
+		"docs:sync": "node ./scripts/sync-docs.mjs",
 		"changeset": "changeset",
 		"version-packages": "changeset version",
 		"release": "pnpm build && changeset publish",

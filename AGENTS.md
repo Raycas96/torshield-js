@@ -23,7 +23,7 @@ TorShield JS — framework adapters + a framework-agnostic core detector that id
 
 1. Multi-source aggregation: merge 3 exit-node sources concurrently into one canonical set.
 2. In-memory O(1) lookup: no disk writes; no per-request HTTP calls.
-3. Auto-refresh: background updater with configurable interval, using `setInterval().unref()` so it does not block process exit.
+3. Auto-refresh: background updater running every 24 hours, using `setInterval().unref()` so it does not block process exit.
 4. Fail-safe boot: repository starts even if all sources fail on the first fetch.
 5. Framework-native adapters: idiomatic Express / Fastify / NestJS integration.
 6. Zero runtime dependencies in core (`@torshield/core` has no runtime deps).
@@ -228,20 +228,18 @@ Agents must preserve these exports:
 Requirements:
 
 - `constructor(options?)`
-  - `refreshIntervalMs` default: 3_600_000 ms (1 hour)
-  - `onRefresh(count)` default: logs a status line (tests may stub)
-  - `onError(error)` default: warns but never throws
+  - options are currently callback-oriented (`onRefresh`, `onError`, `verbose`)
 - `start()`
   - must `await refresh()` once before starting the interval
-  - must schedule `setInterval(() => refresh(), refreshIntervalMs)`
+  - must schedule `setInterval(() => refresh(), 24h)`
   - must call `.unref()` on the interval so it does not block process exit
   - if initial `refresh()` fails, `start()` must still resolve
 - `destroy()`
   - must clear the interval if it exists
-- `isTor(ip)`
+- `isTorNode(ip)`
   - must normalize `::ffff:` mapped IPv4 prefixes
   - must trim and then membership check against the store
-- `nodeCount`
+- `torExitNodesCount`
   - must return current store size
 
 ### 7.3 Fetcher invariants (`fetcher.ts`)
@@ -275,13 +273,14 @@ Requirements:
 
 ### 8.1 Express (`@torshield/express`)
 
-- `blockTorExitNodesMiddleware(options?)` returns an Express middleware function.
+- `initializeDetector(options?)` initializes the singleton detector and must be called during app bootstrap.
+- `blockTorExitNodesMiddleware()` returns an Express middleware function and reads options from the initialized singleton context.
 - Must parse `x-forwarded-for`:
   - if header is missing, fall back to `req.socket.remoteAddress`
   - if header has multiple values, use the leftmost entry
   - handle header as string, string array, or missing
 - Must deny Tor IPs with `statusCode` and JSON `{ error }`.
-- Detector should be created and `start()` called in a non-blocking manner for Express.
+- Detector must be started once and reused across middleware instances.
 
 ### 8.2 Fastify (`@torshield/fastify`)
 
@@ -359,6 +358,8 @@ When an agent finishes implementing something, it must include:
 ---
 
 ## Appendix — TorShield JS Engineering Blueprint (Reference)
+
+Note: the appendix contains bootstrap templates and may lag behind live implementation details. When in doubt, the contracts defined in sections 2-10 and the current package source code are authoritative.
 
 The sections below are a copyable blueprint (config templates + reference package implementations) derived from the TorShield JS design in your prompt. Use it as the authoritative implementation reference when scaffolding or filling in missing package code.
 
