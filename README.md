@@ -24,13 +24,13 @@
 
 ## Packages
 
-- `@torshield/core`  
+- `@raycas/torshield-core`  
   Core detector (`TorDetector`) and primitives.
-- `@torshield/express`  
+- `@raycas/torshield-express`  
   Express adapter with explicit singleton initialization.
-- `@torshield/fastify`  
+- `@raycas/torshield-fastify`  
   Fastify plugin with shared detector initialization and startup readiness.
-- `@torshield/nestjs`  
+- `@raycas/torshield-nestjs`  
   NestJS guard/module integration with async singleton detector initialization and guard override support.
 
 ## Install
@@ -38,37 +38,60 @@
 Install only what your app needs.
 
 ```bash
-npm i @torshield/core
+npm i @raycas/torshield-core
 ```
 
 ```bash
-npm i @torshield/express express
+npm i @raycas/torshield-express express
 ```
 
 ```bash
-npm i @torshield/fastify fastify fastify-plugin
+npm i @raycas/torshield-fastify fastify fastify-plugin
 ```
 
 ```bash
-npm i @torshield/nestjs @nestjs/common @nestjs/core
+npm i @raycas/torshield-nestjs @nestjs/common @nestjs/core
 ```
 
-## Quick Start (Express)
+## Quick Starts
 
-`@torshield/express` uses explicit initialization. Call `initializeDetector(...)` once during bootstrap.
+### Core (`@raycas/torshield-core`)
+
+Use the detector directly when you want framework-agnostic checks.
+
+```ts
+import {TorDetector} from '@raycas/torshield-core'
+
+const detector = new TorDetector({
+	onRefresh(count) {
+		console.log(`Loaded ${count} Tor exit nodes`)
+	},
+	onError(error) {
+		console.error('Tor detector refresh error:', error)
+	},
+})
+
+await detector.start()
+
+const isTor = detector.isTorNode('1.2.3.4')
+console.log({isTor, loaded: detector.torExitNodesCount})
+
+detector.destroy()
+```
+
+### Express (`@raycas/torshield-express`)
+
+Call `initializeDetector(...)` once during bootstrap, then register middleware.
 
 ```ts
 import express from 'express'
-import {initializeDetector, blockTorExitNodesMiddleware} from '@torshield/express'
+import {initializeDetector, blockTorExitNodesMiddleware} from '@raycas/torshield-express'
 
 const app = express()
 
 initializeDetector({
 	statusCode: 403,
 	message: 'Access denied: Tor exit node traffic is not allowed.',
-	onError(error) {
-		console.error('Tor detector refresh error:', error)
-	},
 })
 
 app.set('trust proxy', true)
@@ -79,9 +102,47 @@ app.get('/health', (_req, res) => {
 })
 ```
 
+### Fastify (`@raycas/torshield-fastify`)
+
+Register the plugin once. The detector is initialized during plugin startup.
+
+```ts
+import Fastify from 'fastify'
+import torShieldPlugin from '@raycas/torshield-fastify'
+
+const app = Fastify()
+
+await app.register(torShieldPlugin, {
+	statusCode: 403,
+	message: 'Access denied: Tor exit node traffic is not allowed.',
+})
+
+app.get('/health', async () => ({ok: true}))
+
+await app.listen({port: 3000})
+```
+
+### NestJS (`@raycas/torshield-nestjs`)
+
+Use `forRoot(...)` for a global guard.
+
+```ts
+import {Module} from '@nestjs/common'
+import {TorModule} from '@raycas/torshield-nestjs'
+
+@Module({
+	imports: [
+		TorModule.forRoot({
+			verbose: true,
+		}),
+	],
+})
+export class AppModule {}
+```
+
 ## Core API
 
-`@torshield/core` exports:
+`@raycas/torshield-core` exports:
 
 - `TorDetector`
 - `TorDetectorOptions`
@@ -126,8 +187,10 @@ Current `TorDetector` behavior:
 - Follow engineering rules in `AGENTS.md`.
 - Keep docs aligned with public API changes.
 - Run checks before merge:
-  - `pnpm -F @torshield/core test`
-  - `pnpm -F @torshield/express test`
+  - `pnpm -F @raycas/torshield-core test`
+  - `pnpm -F @raycas/torshield-express test`
+  - `pnpm -F @raycas/torshield-fastify test`
+  - `pnpm -F @raycas/torshield-nestjs test`
 
 ## Dependency Updates (Renovate)
 

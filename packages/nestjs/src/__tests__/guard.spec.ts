@@ -1,6 +1,6 @@
 import {ForbiddenException, type ExecutionContext} from '@nestjs/common'
 import {Test, type TestingModule} from '@nestjs/testing'
-import {TorDetector} from '@torshield/core'
+import {TorDetector} from '@raycas/torshield-core'
 import {beforeEach, describe, expect, it, vi} from 'vitest'
 import {TorGuard} from '../tor.guard'
 import {torDetectorToken} from '../tokens'

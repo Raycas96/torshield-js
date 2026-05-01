@@ -1,6 +1,6 @@
 import type {DynamicModule, Provider} from '@nestjs/common'
 import {APP_GUARD} from '@nestjs/core'
-import type {TorDetector} from '@torshield/core'
+import type {TorDetector} from '@raycas/torshield-core'
 import {initializeDetector} from './detector-init'
 import {torDetectorToken} from './tokens'
 import {TorGuard} from './tor.guard'

@@ -1,5 +1,5 @@
 import {ForbiddenException, type CanActivate, type ExecutionContext} from '@nestjs/common'
-import type {TorDetector} from '@torshield/core'
+import type {TorDetector} from '@raycas/torshield-core'
 import type {TorNestjsOptions} from './types'
 
 const defaultErrorMessage = 'Access denied: Tor exit node traffic is not allowed.'

@@ -1,4 +1,4 @@
-import {TorDetector} from '@torshield/core'
+import {TorDetector} from '@raycas/torshield-core'
 import type {TorNestjsOptions} from './types'
 
 type DetectorContext = {

@@ -1,4 +1,4 @@
-import type {TorDetectorOptions} from '@torshield/core'
+import type {TorDetectorOptions} from '@raycas/torshield-core'
 
 export type TorFastifyOptions = {
 	statusCode?: number

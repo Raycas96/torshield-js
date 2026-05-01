@@ -1,18 +1,18 @@
-# @torshield/nestjs
+# @raycas/torshield-nestjs
 
 NestJS module + guard integration for Tor exit-node detection.
 
 ## Install
 
 ```bash
-npm i @torshield/nestjs @nestjs/common @nestjs/core
+npm i @raycas/torshield-nestjs @nestjs/common @nestjs/core
 ```
 
 ## Usage
 
 ```ts
 import {Module} from '@nestjs/common'
-import {TorModule} from '@torshield/nestjs'
+import {TorModule} from '@raycas/torshield-nestjs'
 
 @Module({
 	imports: [

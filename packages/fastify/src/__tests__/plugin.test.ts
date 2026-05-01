@@ -9,7 +9,7 @@ const detectorState = vi.hoisted(() => ({
 	destroy: vi.fn<() => void>(),
 }))
 
-vi.mock('@torshield/core', () => ({
+vi.mock('@raycas/torshield-core', () => ({
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	TorDetector: class {
 		start = detectorState.start
@@ -18,7 +18,7 @@ vi.mock('@torshield/core', () => ({
 	},
 }))
 
-describe('@torshield/fastify plugin', () => {
+describe('@raycas/torshield-fastify plugin', () => {
 	beforeEach(() => {
 		destroyDetector()
 		detectorState.start.mockReset()

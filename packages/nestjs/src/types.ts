@@ -1,4 +1,4 @@
-import type {TorDetectorOptions} from '@torshield/core'
+import type {TorDetectorOptions} from '@raycas/torshield-core'
 import type {ExecutionContext} from '@nestjs/common'
 
 export type TorNestjsOptions = TorDetectorOptions & {

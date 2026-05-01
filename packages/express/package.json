@@ -1,5 +1,5 @@
 {
-	"name": "@torshield/express",
+	"name": "@raycas/torshield-express",
 	"version": "1.0.0",
 	"private": true,
 	"main": "dist/index.cjs",
@@ -16,7 +16,7 @@
 		"dist"
 	],
 	"dependencies": {
-		"@torshield/core": "workspace:*"
+		"@raycas/torshield-core": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.6",

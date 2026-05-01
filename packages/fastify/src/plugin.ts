@@ -45,6 +45,6 @@ async function invokeOnTorDetected(
 }
 
 export default fastifyPlugin(torPlugin, {
-	name: '@torshield/fastify',
+	name: '@raycas/torshield-fastify',
 	fastify: '>=4.0.0',
 })

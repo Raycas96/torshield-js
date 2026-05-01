@@ -1,4 +1,4 @@
-# @torshield/express
+# @raycas/torshield-express
 
 <p align="center">
   <img src="./assets/logo.png" alt="TorShield logo" width="360" />
@@ -17,7 +17,7 @@
 ## Install
 
 ```bash
-pnpm add @torshield/express express
+pnpm add @raycas/torshield-express express
 ```
 
 ## Quick Start
@@ -26,7 +26,7 @@ Initialize detector once during app bootstrap, then register the middleware.
 
 ```ts
 import express from 'express'
-import {initializeDetector, blockTorExitNodesMiddleware} from '@torshield/express'
+import {initializeDetector, blockTorExitNodesMiddleware} from '@raycas/torshield-express'
 
 const app = express()
 
@@ -55,7 +55,7 @@ Call this before `blockTorExitNodesMiddleware()`.
 Returns Express middleware that:
 
 - extracts the client IP from `x-forwarded-for` (left-most value) or socket address
-- checks Tor membership via `@torshield/core`
+- checks Tor membership via `@raycas/torshield-core`
 - calls `next()` for allowed traffic
 - responds with `statusCode` and `{error: message}` for blocked traffic
 - if `onTorDetected` is provided, it is called instead of the default deny response

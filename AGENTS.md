@@ -14,10 +14,10 @@ TorShield JS — framework adapters + a framework-agnostic core detector that id
 
 ### Monorepo packages (target)
 
-- `@torshield/core` (zero runtime deps, in-memory Set lookup)
-- `@torshield/express` (Express middleware)
-- `@torshield/fastify` (Fastify plugin)
-- `@torshield/nestjs` (NestJS module + guard)
+- `@raycas/torshield-core` (zero runtime deps, in-memory Set lookup)
+- `@raycas/torshield-express` (Express middleware)
+- `@raycas/torshield-fastify` (Fastify plugin)
+- `@raycas/torshield-nestjs` (NestJS module + guard)
 
 ### Differentiators (non-negotiable)
 
@@ -26,7 +26,7 @@ TorShield JS — framework adapters + a framework-agnostic core detector that id
 3. Auto-refresh: background updater running every 24 hours, using `setInterval().unref()` so it does not block process exit.
 4. Fail-safe boot: repository starts even if all sources fail on the first fetch.
 5. Framework-native adapters: idiomatic Express / Fastify / NestJS integration.
-6. Zero runtime dependencies in core (`@torshield/core` has no runtime deps).
+6. Zero runtime dependencies in core (`@raycas/torshield-core` has no runtime deps).
 7. Actively maintained: document maintenance stance in README(s) and keep code modern.
 
 ---
@@ -122,10 +122,10 @@ Agents should run (names may be aligned by repo tooling):
 
 ### 4.3 Per-package checks
 
-- Core: `pnpm -F @torshield/core test`
-- Express: `pnpm -F @torshield/express test`
-- Fastify: `pnpm -F @torshield/fastify test`
-- NestJS: `pnpm -F @torshield/nestjs test`
+- Core: `pnpm -F @raycas/torshield-core test`
+- Express: `pnpm -F @raycas/torshield-express test`
+- Fastify: `pnpm -F @raycas/torshield-fastify test`
+- NestJS: `pnpm -F @raycas/torshield-nestjs test`
 
 ---
 
@@ -158,7 +158,7 @@ Agents should run (names may be aligned by repo tooling):
 Agents should implement this layout (or update this document if the layout changes intentionally).
 
 ```text
-torshield-js/
+torshield/
   .changeset/
   .github/
     workflows/
@@ -214,7 +214,7 @@ torshield-js/
 
 ---
 
-## 7) Core Package Contracts (`@torshield/core`)
+## 7) Core Package Contracts (`@raycas/torshield-core`)
 
 ### 7.1 Public API
 
@@ -271,7 +271,7 @@ Requirements:
 
 ## 8) Framework Adapter Contracts
 
-### 8.1 Express (`@torshield/express`)
+### 8.1 Express (`@raycas/torshield-express`)
 
 - `initializeDetector(options?)` initializes the singleton detector and must be called during app bootstrap.
 - `blockTorExitNodesMiddleware()` returns an Express middleware function and reads options from the initialized singleton context.
@@ -284,7 +284,7 @@ Requirements:
 - Must support custom Tor handling via options override callback (`onTorDetected`) in middleware path.
 - Detector must be started once and reused across middleware instances.
 
-### 8.2 Fastify (`@torshield/fastify`)
+### 8.2 Fastify (`@raycas/torshield-fastify`)
 
 - Expose a Fastify plugin (via `fastify-plugin`).
 - Must `await detector.start()` so `fastify.ready()` sees a populated list (at least best-effort).
@@ -295,7 +295,7 @@ Requirements:
   - `fastify.decorate('torDetector', detector)`
 - Must destroy the detector on server close.
 
-### 8.3 NestJS (`@torshield/nestjs`)
+### 8.3 NestJS (`@raycas/torshield-nestjs`)
 
 - Provide:
   - `torDetectorToken` (injection token)
@@ -341,7 +341,7 @@ Agents must:
 
 - Commit message prefixes (examples):
   - `chore:` for tooling/docs-only
-  - `feat(core):` for `@torshield/core` functionality
+  - `feat(core):` for `@raycas/torshield-core` functionality
   - `feat(express):` for Express adapter
   - `feat(fastify):` for Fastify adapter
   - `feat(nestjs):` for NestJS adapter
@@ -390,18 +390,18 @@ TorShield JS — Node.js / TypeScript Monorepo
 
 ### Suggested npm scope / packages
 
-- npm scope: `@torshield`
-- core package: `@torshield/core`
-- Express wrapper: `@torshield/express`
-- Fastify wrapper: `@torshield/fastify`
-- NestJS wrapper: `@torshield/nestjs`
+- npm scope: `@raycas`
+- core package: `@raycas/torshield-core`
+- Express wrapper: `@raycas/torshield-express`
+- Fastify wrapper: `@raycas/torshield-fastify`
+- NestJS wrapper: `@raycas/torshield-nestjs`
 
 ---
 
 ## PART 2 — Expected Directory Tree
 
 ```text
-torshield-js/
+torshield/
 ├── .changeset/
 │   └── config.json
 ├── .github/
@@ -465,7 +465,7 @@ packages:
 
 ```json
 {
-	"name": "torshield-js",
+	"name": "@raycas/torshield",
 	"private": true,
 	"packageManager": "pnpm@9.0.0",
 	"scripts": {
@@ -639,7 +639,7 @@ jobs:
 
 ## PART 4 — Package Implementations (Reference)
 
-### 4.1 `@torshield/core`
+### 4.1 `@raycas/torshield-core`
 
 #### `packages/core/src/parser.ts`
 
@@ -782,12 +782,12 @@ export type {TorDetectorOptions} from './detector'
 
 ---
 
-### 4.2 `@torshield/express`
+### 4.2 `@raycas/torshield-express`
 
 #### `packages/express/src/index.ts`
 
 ```typescript
-import {TorDetector, TorDetectorOptions} from '@torshield/core'
+import {TorDetector, TorDetectorOptions} from '@raycas/torshield-core'
 import {Request, Response, NextFunction} from 'express'
 
 export interface TorMiddlewareOptions extends TorDetectorOptions {
@@ -820,14 +820,14 @@ export function blockTorExitNodesMiddleware(options: TorMiddlewareOptions = {}) 
 
 ---
 
-### 4.3 `@torshield/fastify`
+### 4.3 `@raycas/torshield-fastify`
 
 #### `packages/fastify/src/index.ts`
 
 ```typescript
 import fp from 'fastify-plugin'
 import {FastifyPluginAsync} from 'fastify'
-import {TorDetector, TorDetectorOptions} from '@torshield/core'
+import {TorDetector, TorDetectorOptions} from '@raycas/torshield-core'
 
 export interface TorFastifyOptions extends TorDetectorOptions {
 	message?: string
@@ -856,14 +856,14 @@ const torPlugin: FastifyPluginAsync<TorFastifyOptions> = async (fastify, options
 }
 
 export default fp(torPlugin, {
-	name: '@torshield/fastify',
+	name: '@raycas/torshield-fastify',
 	fastify: '>=4.0.0',
 })
 ```
 
 ---
 
-### 4.4 `@torshield/nestjs`
+### 4.4 `@raycas/torshield-nestjs`
 
 #### `packages/nestjs/src/tokens.ts`
 
@@ -875,7 +875,7 @@ export const TOR_DETECTOR_TOKEN = Symbol('TOR_DETECTOR_TOKEN')
 
 ```typescript
 import {Injectable, CanActivate, ExecutionContext, ForbiddenException, Inject} from '@nestjs/common'
-import {TorDetector} from '@torshield/core'
+import {TorDetector} from '@raycas/torshield-core'
 import {TOR_DETECTOR_TOKEN} from './tokens'
 
 @Injectable()
@@ -903,7 +903,7 @@ export class TorGuard implements CanActivate {
 ```typescript
 import {Module, DynamicModule} from '@nestjs/common'
 import {APP_GUARD} from '@nestjs/core'
-import {TorDetector, TorDetectorOptions} from '@torshield/core'
+import {TorDetector, TorDetectorOptions} from '@raycas/torshield-core'
 import {TorGuard} from './tor.guard'
 import {TOR_DETECTOR_TOKEN} from './tokens'
 

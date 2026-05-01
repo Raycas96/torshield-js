@@ -9,7 +9,7 @@ const detectorState = vi.hoisted(() => ({
 	isTorNode: vi.fn<(ip: string) => boolean>(),
 }))
 
-vi.mock('@torshield/core', () => ({
+vi.mock('@raycas/torshield-core', () => ({
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	TorDetector: class {
 		start = detectorState.start

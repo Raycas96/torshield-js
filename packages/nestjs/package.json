@@ -1,5 +1,5 @@
 {
-	"name": "@torshield/nestjs",
+	"name": "@raycas/torshield-nestjs",
 	"version": "1.0.0",
 	"private": true,
 	"main": "dist/index.cjs",
@@ -16,7 +16,7 @@
 		"dist"
 	],
 	"dependencies": {
-		"@torshield/core": "workspace:*"
+		"@raycas/torshield-core": "workspace:*"
 	},
 	"peerDependencies": {
 		"@nestjs/common": ">=10.0.0",
