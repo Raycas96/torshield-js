@@ -1,6 +1,6 @@
 import createFastify from 'fastify'
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
-import torPlugin from '../index'
+import {torShieldFastifyPlugin} from '../index'
 import {destroyDetector} from '../detector-init'
 
 const detectorState = vi.hoisted(() => ({
@@ -109,7 +109,7 @@ describe('@raycas/torshield-fastify plugin', () => {
 		detectorState.start.mockReturnValue(startDeferred)
 
 		const app = createFastify()
-		void app.register(torPlugin)
+		void app.register(torShieldFastifyPlugin)
 		app.get('/resource', async () => ({ok: true}))
 
 		let readyResolved = false
@@ -127,12 +127,12 @@ describe('@raycas/torshield-fastify plugin', () => {
 
 	it('initializes detector once across multiple fastify instances', async () => {
 		const appA = createFastify()
-		await appA.register(torPlugin)
+		await appA.register(torShieldFastifyPlugin)
 		appA.get('/resource', async () => ({ok: true}))
 		await appA.ready()
 
 		const appB = createFastify()
-		await appB.register(torPlugin)
+		await appB.register(torShieldFastifyPlugin)
 		appB.get('/resource', async () => ({ok: true}))
 		await appB.ready()
 
@@ -143,7 +143,7 @@ describe('@raycas/torshield-fastify plugin', () => {
 
 	it('throws when reinitialized with different lifecycle options', async () => {
 		const appA = createFastify()
-		await appA.register(torPlugin, {
+		await appA.register(torShieldFastifyPlugin, {
 			statusCode: 403,
 			message: 'default',
 		})
@@ -151,7 +151,7 @@ describe('@raycas/torshield-fastify plugin', () => {
 		await appA.ready()
 
 		const appB = createFastify()
-		void appB.register(torPlugin, {
+		void appB.register(torShieldFastifyPlugin, {
 			statusCode: 451,
 			message: 'changed',
 		})
@@ -180,7 +180,7 @@ describe('@raycas/torshield-fastify plugin', () => {
 
 async function buildServer(options: Record<string, unknown> = {}) {
 	const app = createFastify()
-	await app.register(torPlugin, options)
+	await app.register(torShieldFastifyPlugin, options)
 	app.get('/resource', async () => ({ok: true}))
 	await app.ready()
 	return app

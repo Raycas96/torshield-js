@@ -289,7 +289,7 @@ Requirements:
 - Expose a Fastify plugin (via `fastify-plugin`).
 - Must `await detector.start()` so `fastify.ready()` sees a populated list (at least best-effort).
 - Detector initialization/options are singleton-lifecycle and must reject conflicting re-initialization options.
-- Must add `onRequest` hook to deny Tor IPs.
+- Must add `onRequest` hook to deny Tor IPs using `request.ip`; host apps behind a reverse proxy must configure Fastify `trustProxy` so `request.ip` reflects `X-Forwarded-For` (document in README).
 - Must support custom Tor handling via plugin option callback (`onTorDetected`).
 - Must decorate the instance for testing:
   - `fastify.decorate('torDetector', detector)`

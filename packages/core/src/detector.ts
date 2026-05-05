@@ -56,7 +56,8 @@ export class TorDetector {
 	}
 
 	isTorNode(ip: string): boolean {
-		return this.store.has(normalizeIp(ip))
+		const normalizedIp = normalizeIp(ip)
+		return this.store.has(normalizedIp)
 	}
 
 	get torExitNodesCount(): number {

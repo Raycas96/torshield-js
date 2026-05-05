@@ -33,6 +33,8 @@
 - `@raycas/torshield-nestjs`  
   NestJS guard/module integration with async singleton detector initialization and guard override support.
 
+Published tarballs ship a **README per package** (see each `packages/*/README.md`). This file is the monorepo overview.
+
 ## Install
 
 Install only what your app needs.
@@ -110,7 +112,10 @@ Register the plugin once. The detector is initialized during plugin startup.
 import Fastify from 'fastify'
 import torShieldPlugin from '@raycas/torshield-fastify'
 
-const app = Fastify()
+const app = Fastify({
+	// Behind Nginx, Cloudflare, ingress, or ALB — so `request.ip` uses `X-Forwarded-For`
+	trustProxy: true,
+})
 
 await app.register(torShieldPlugin, {
 	statusCode: 403,
@@ -121,6 +126,8 @@ app.get('/health', async () => ({ok: true}))
 
 await app.listen({port: 3000})
 ```
+
+If TypeScript reports `No overload matches this call` on `register()` and the error lists **two different** `node_modules/.../fastify` paths, you have duplicate Fastify installs (common when `pnpm link` or `link:` pulls in another repo’s `node_modules`). Use a single `fastify` version, run `pnpm dedupe`, or see [packages/fastify/README.md](packages/fastify/README.md#troubleshooting-duplicate-fastify-types-on-register).
 
 ### NestJS (`@raycas/torshield-nestjs`)
 
@@ -179,7 +186,7 @@ Current `TorDetector` behavior:
 
 - No per-request HTTP calls.
 - Refresh failures trigger callbacks; they do not crash the app.
-- Behind proxies, enable `app.set('trust proxy', true)` for accurate client IP extraction.
+- Behind proxies: Express — `app.set('trust proxy', true)`; Fastify — `Fastify({ trustProxy: true })` (the plugin uses `request.ip`). NestJS follows your HTTP adapter (Express/Fastify) for the underlying request.
 - Adapter detector options are set on first initialization and reused for the lifecycle.
 
 ## Contributing

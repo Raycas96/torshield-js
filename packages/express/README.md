@@ -1,28 +1,33 @@
 # @raycas/torshield-express
 
+Express middleware adapter for blocking Tor exit-node traffic, using **`@raycas/torshield-core`** as a **singleton** detector (initialize once, reuse on every request).
+
 <p align="center">
   <img src="./assets/logo.png" alt="TorShield logo" width="360" />
 </p>
 
 <p align="center">
-  Express middleware adapter for blocking Tor exit-node traffic.
-</p>
-
-<p align="center">
-  <img alt="Express" src="https://img.shields.io/badge/Express-%3E%3D4-000000.svg" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-Ready-3178C6.svg" />
+  <img alt="Express" src="https://img.shields.io/badge/Express-%3E%3D4.22-000000.svg" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-ready-3178C6.svg" />
   <img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" />
 </p>
+
+## Requirements
+
+- Node **≥ 20**
+- **`express`** **≥ 4.22.1** (peer dependency)
 
 ## Install
 
 ```bash
-pnpm add @raycas/torshield-express express
+npm i @raycas/torshield-express express
 ```
 
-## Quick Start
+The core package ships as a normal dependency of this adapter — you do not install `@raycas/torshield-core` separately for typical Express usage.
 
-Initialize detector once during app bootstrap, then register the middleware.
+## Quick start
+
+Initialize **`initializeDetector`** once during bootstrap (before `app.listen`), then mount the middleware.
 
 ```ts
 import express from 'express'
@@ -43,22 +48,31 @@ app.get('/health', (_req, res) => {
 })
 ```
 
+## Reverse proxy
+
+Behind Nginx, Cloudflare, Kubernetes ingress, AWS ALB, etc., set **`trust proxy`** so Express and downstream headers align with your deployment. The middleware reads **`x-forwarded-for`** (left-most IP in the list) and falls back to **`socket.remoteAddress`**.
+
+```ts
+app.set('trust proxy', true)
+```
+
+See [Express `trust proxy`](https://expressjs.com/en/guide/behind-proxies.html).
+
 ## API
 
 ### `initializeDetector(options?)`
 
-Creates (once) and starts the singleton detector used by this package.  
-Call this before `blockTorExitNodesMiddleware()`.
+Creates and starts the shared detector. Call **once** before using `blockTorExitNodesMiddleware()`.
 
 ### `blockTorExitNodesMiddleware()`
 
-Returns Express middleware that:
+Returns middleware that:
 
-- extracts the client IP from `x-forwarded-for` (left-most value) or socket address
-- checks Tor membership via `@raycas/torshield-core`
-- calls `next()` for allowed traffic
-- responds with `statusCode` and `{error: message}` for blocked traffic
-- if `onTorDetected` is provided, it is called instead of the default deny response
+- reads client IP from **`x-forwarded-for`** (string or array → **left-most** value), else socket address
+- resolves Tor membership via **`@raycas/torshield-core`**
+- calls **`next()`** when traffic is allowed
+- responds with **`statusCode`** + **`{error: message}`** when blocked
+- if **`onTorDetected`** is configured, invokes it instead of the default denial
 
 Detector options type:
 
@@ -85,19 +99,18 @@ Default values:
 - `message`: `Access denied: Tor exit node traffic is not allowed.`
 <!-- docs-sync:express-defaults:end -->
 
-## Behavior Notes
+## Behavior notes
 
-- Singleton detector instance is reused across middleware registrations.
-- Middleware requires prior initialization (`initializeDetector(...)`).
-- Refresh loop runs in background every 24 hours.
-- Startup/refresh failures are fail-open (no hard crash).
+- One detector instance for the entire process tree that imported this initializer.
+- **24 h** background refresh (`unref`-style timer semantics from core).
+- Refresh failures invoke **`onError`** / logging; they do not crash your server by default.
 
-## Reverse Proxy Setup
+## Related packages
 
-When running behind Nginx, Cloudflare, ingress, or ALB, enable trust proxy:
+| Package                                   | Role                        |
+| ----------------------------------------- | --------------------------- |
+| [`@raycas/torshield-core`](../core)       | Use alone if not on Express |
+| [`@raycas/torshield-fastify`](../fastify) | Fastify plugin              |
+| [`@raycas/torshield-nestjs`](../nestjs)   | NestJS module + guard       |
 
-```ts
-app.set('trust proxy', true)
-```
-
-Without this, the adapter may receive proxy IPs instead of real client IPs.
+Full story: [**monorepo README**](../../README.md).
