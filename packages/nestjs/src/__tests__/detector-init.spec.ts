@@ -30,11 +30,14 @@ describe('nestjs detector-init', () => {
 	})
 
 	it('throws when reinitialized with different options', () => {
-		initializeDetector({verbose: true})
+		const onRefresh = vi.fn<(count: number) => void>()
+		initializeDetector({onRefresh})
 
-		expect(() => initializeDetector({verbose: false})).toThrow(
-			'NestJS detector options can only be set during first initialization',
-		)
+		expect(() =>
+			initializeDetector({
+				onRefresh: vi.fn<(count: number) => void>(),
+			}),
+		).toThrow('NestJS detector options can only be set during first initialization')
 	})
 
 	it('throws when reinitialized with different onTorDetected callback', () => {

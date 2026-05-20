@@ -55,6 +55,30 @@ npm i @raycas/torshield-fastify fastify fastify-plugin
 npm i @raycas/torshield-nestjs @nestjs/common @nestjs/core
 ```
 
+## Local Example Apps
+
+Run real apps in this monorepo for manual verification.
+
+```bash
+pnpm install
+```
+
+```bash
+pnpm example:express
+pnpm example:fastify
+pnpm example:nestjs
+```
+
+Each app also has an ngrok tunnel script:
+
+```bash
+pnpm example:express:tunnel
+pnpm example:fastify:tunnel
+pnpm example:nestjs:tunnel
+```
+
+Examples live in `examples/express-app`, `examples/fastify-app`, and `examples/nestjs-app`.
+
 ## Quick Starts
 
 ### Core (`@raycas/torshield-core`)
@@ -110,14 +134,14 @@ Register the plugin once. The detector is initialized during plugin startup.
 
 ```ts
 import Fastify from 'fastify'
-import torShieldPlugin from '@raycas/torshield-fastify'
+import {torShieldFastifyPlugin} from '@raycas/torshield-fastify'
 
 const app = Fastify({
 	// Behind Nginx, Cloudflare, ingress, or ALB — so `request.ip` uses `X-Forwarded-For`
 	trustProxy: true,
 })
 
-await app.register(torShieldPlugin, {
+await app.register(torShieldFastifyPlugin, {
 	statusCode: 403,
 	message: 'Access denied: Tor exit node traffic is not allowed.',
 })

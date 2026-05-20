@@ -1,20 +1,20 @@
+import {isDebugEnabled} from './debug'
 import {fetchAllSources} from './fetcher'
-import {normalizeIp, parseLines} from './parser'
+import {extractDecimalTailIpv4, normalizeIp, parseLines} from './parser'
 import {IpStore} from './store'
 
 export type TorDetectorOptions = {
 	onRefresh?: (count: number) => void
 	onError?: (error: unknown) => void
-	verbose?: boolean
 }
 
 /**
- * The TorDetector class is used to detect if a given IP address is a Tor exit node.
- * It fetches the IP list from the sources and parses it to a set of IP addresses.
- * It then checks if the given IP address is in the set.
- * It also refreshes the IP list every 24 hours.
- * It also logs the number of Tor exit nodes found.
- * It also logs the error if the refresh fails.
+ The TorDetector class is used to detect if a given IP address is a Tor exit node.
+ It fetches the IP list from the sources and parses it to a set of IP addresses.
+ It then checks if the given IP address is in the set.
+ It also refreshes the IP list every 24 hours.
+ It also logs the number of Tor exit nodes found.
+ It also logs the error if the refresh fails.
  */
 export class TorDetector {
 	private readonly options: TorDetectorOptions
@@ -57,7 +57,18 @@ export class TorDetector {
 
 	isTorNode(ip: string): boolean {
 		const normalizedIp = normalizeIp(ip)
-		return this.store.has(normalizedIp)
+		const isDirectMatch = this.store.has(normalizedIp)
+		const embeddedIpv4 = extractDecimalTailIpv4(normalizedIp) ?? ''
+		const isEmbeddedMatch = this.store.has(embeddedIpv4)
+		const isTor = isDirectMatch || isEmbeddedMatch
+
+		if (isDebugEnabled()) {
+			console.info(
+				`[TorDetector][debug] isTorNode: ip=${normalizedIp} direct=${isDirectMatch} embeddedIpv4=${embeddedIpv4 ?? 'n/a'} embedded=${isEmbeddedMatch} result=${isTor}`,
+			)
+		}
+
+		return isTor
 	}
 
 	get torExitNodesCount(): number {
@@ -65,8 +76,13 @@ export class TorDetector {
 	}
 
 	private async fetchTorExitNodes(): Promise<void> {
-		const ips = await fetchAllSources()
+		const ips = await fetchAllSources({})
 		const parsedIps = parseLines(ips)
 		this.store.swap(new Set(parsedIps))
+		if (isDebugEnabled()) {
+			console.info(
+				`[TorDetector][debug] refresh: ${ips.length} raw lines, ${parsedIps.size} unique valid exit nodes loaded`,
+			)
+		}
 	}
 }

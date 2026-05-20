@@ -75,6 +75,15 @@ describe('TorDetector', () => {
 		expect(detector.isTorNode('')).toBe(false)
 	})
 
+	it('matches Tor dual-stack IPv6 when only the embedded IPv4 is in the list', async () => {
+		fetchAllSourcesMock.mockResolvedValue(['192.42.116.108'])
+		const detector = new TorDetector()
+
+		await detector.start()
+
+		expect(detector.isTorNode('2001:67c:e60:c0c:192:42:116:108')).toBe(true)
+	})
+
 	it('torExitNodesCount reflects successful refresh output', async () => {
 		fetchAllSourcesMock.mockResolvedValue(['1.2.3.4', '1.2.3.4', '::ffff:8.8.8.8'])
 		const detector = new TorDetector()

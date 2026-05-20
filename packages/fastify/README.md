@@ -22,18 +22,31 @@ npm i @raycas/torshield-fastify fastify fastify-plugin
 
 (Core is bundled; you only add the peers above.)
 
+## Local example app
+
+```bash
+pnpm example:fastify
+```
+
+Or run only the workspace:
+
+```bash
+pnpm -C examples/fastify-app dev
+pnpm -C examples/fastify-app tunnel
+```
+
 ## Quick start
 
 ```ts
 import Fastify from 'fastify'
-import torShieldPlugin from '@raycas/torshield-fastify'
+import {torShieldFastifyPlugin} from '@raycas/torshield-fastify'
 
 const app = Fastify({
 	// Needed behind reverse proxies — see below
 	trustProxy: true,
 })
 
-await app.register(torShieldPlugin, {
+await app.register(torShieldFastifyPlugin, {
 	statusCode: 403,
 	message: 'Access denied: Tor exit node traffic is not allowed.',
 })
@@ -69,9 +82,12 @@ If the error cites **two different** `node_modules/.../fastify` paths (typical w
 ```ts
 import type {FastifyPluginAsync} from 'fastify'
 import type {TorFastifyOptions} from '@raycas/torshield-fastify'
-import torShieldPlugin from '@raycas/torshield-fastify'
+import {torShieldFastifyPlugin} from '@raycas/torshield-fastify'
 
-await app.register(torShieldPlugin as unknown as FastifyPluginAsync<TorFastifyOptions>, options)
+await app.register(
+	torShieldFastifyPlugin as unknown as FastifyPluginAsync<TorFastifyOptions>,
+	options,
+)
 ```
 
 ## Related packages

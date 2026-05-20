@@ -1,0 +1,23 @@
+{
+	"name": "@raycas/example-nestjs-app",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "tsx src/main.ts",
+		"tunnel": "ngrok http 3003"
+	},
+	"dependencies": {
+		"@nestjs/common": "^11.1.19",
+		"@nestjs/core": "^11.1.19",
+		"@nestjs/platform-express": "^11.1.19",
+		"@raycas/torshield-nestjs": "workspace:*",
+		"ngrok": "^5.0.0-beta.2",
+		"reflect-metadata": "^0.2.2",
+		"rxjs": "^7.8.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.30",
+		"tsx": "^4.20.6",
+		"typescript": "^6.0.3"
+	}
+}

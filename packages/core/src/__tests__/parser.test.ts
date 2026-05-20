@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {normalizeIp, parseLines} from '@/parser'
+import {extractDecimalTailIpv4, normalizeIp, parseLines} from '@/parser'
 
 describe('parseLines', () => {
 	it('skips # comment lines', () => {
@@ -73,5 +73,19 @@ describe('parseLines', () => {
 		expect(normalizeIp(' 1.2.3.4 ')).toBe('1.2.3.4')
 		expect(normalizeIp('::ffff:1.2.3.4')).toBe('1.2.3.4')
 		expect(normalizeIp('  ::ffff:8.8.8.8\t')).toBe('8.8.8.8')
+	})
+
+	it('normalizeIp canonicalizes IPv6 case for stable lookups', () => {
+		expect(normalizeIp('2A03:4000:28:1E8::69')).toBe('2a03:4000:28:1e8::69')
+		expect(normalizeIp('  2a03:4000:28:1E8::69\t')).toBe('2a03:4000:28:1e8::69')
+	})
+
+	it('extractDecimalTailIpv4 reads Tor dual-stack decimal tail notation', () => {
+		expect(extractDecimalTailIpv4('2001:67c:e60:c0c:192:42:116:108')).toBe('192.42.116.108')
+	})
+
+	it('extractDecimalTailIpv4 ignores native IPv6 without decimal tail', () => {
+		expect(extractDecimalTailIpv4('2a03:4000:28:1e8::69')).toBeUndefined()
+		expect(extractDecimalTailIpv4('2a0d:bbc7::f816:3eff:fe18:f410')).toBeUndefined()
 	})
 })

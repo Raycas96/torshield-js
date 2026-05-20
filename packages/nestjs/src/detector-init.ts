@@ -35,7 +35,6 @@ function assertCompatibleOptions(
 	nextOptions: TorNestjsOptions,
 ): void {
 	if (
-		initialOptions.verbose !== nextOptions.verbose ||
 		initialOptions.onRefresh !== nextOptions.onRefresh ||
 		initialOptions.onError !== nextOptions.onError ||
 		initialOptions.onTorDetected !== nextOptions.onTorDetected

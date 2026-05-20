@@ -13,25 +13,42 @@ const xoConfig = eslintConfigXo({
 
 // eslint-config-xo may override rules after it applies its own defaults.
 // Apply our formatting overrides last so they actually win.
-export default xoConfig.map(config => ({
-	...config,
-	rules: {
-		...config.rules,
-		'import-x/extensions': 'off',
-		'@stylistic/function-paren-newline': 'off',
-		'@stylistic/object-curly-newline': 'off',
-		'@stylistic/operator-linebreak': 'off',
+const sharedRules = {
+	'import-x/extensions': 'off',
+	'@stylistic/function-paren-newline': 'off',
+	'@stylistic/object-curly-newline': 'off',
+	'@stylistic/operator-linebreak': 'off',
+}
+
+const sharedIgnores = [
+	'**/*/dist',
+	'**/*/node_modules',
+	'package-lock.json',
+	'**/*/pnpm-lock.yaml',
+	'**/*/pnpm-workspace.yaml',
+	'**/*/turbo.json',
+	'**/*/tsconfig.json',
+	'**/*/tsconfig.base.json',
+	'**/*/tsconfig.node.json',
+	'**/*/tsconfig.app.json',
+]
+
+const config = [
+	...xoConfig.map(config => ({
+		...config,
+		rules: {
+			...config.rules,
+			...sharedRules,
+		},
+		ignores: sharedIgnores,
+	})),
+	{
+		files: ['examples/nestjs-app/**/*.ts'],
+		rules: {
+			'new-cap': 'off',
+			'import-x/no-unassigned-import': 'off',
+		},
 	},
-	ignores: [
-		'**/*/dist',
-		'**/*/node_modules',
-		'package-lock.json',
-		'**/*/pnpm-lock.yaml',
-		'**/*/pnpm-workspace.yaml',
-		'**/*/turbo.json',
-		'**/*/tsconfig.json',
-		'**/*/tsconfig.base.json',
-		'**/*/tsconfig.node.json',
-		'**/*/tsconfig.app.json',
-	],
-}))
+]
+
+export default config

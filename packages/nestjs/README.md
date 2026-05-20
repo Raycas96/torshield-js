@@ -19,6 +19,19 @@ NestJS **dynamic module** + **`CanActivate` guard** for Tor exit-node blocking, 
 npm i @raycas/torshield-nestjs @nestjs/common @nestjs/core
 ```
 
+## Local example app
+
+```bash
+pnpm example:nestjs
+```
+
+Or run only the workspace:
+
+```bash
+pnpm -C examples/nestjs-app dev
+pnpm -C examples/nestjs-app tunnel
+```
+
 ## Quick start (`forRoot`)
 
 Registers a **global guard** so all HTTP routes pass through Tor checks unless you opt out elsewhere.

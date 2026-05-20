@@ -25,6 +25,21 @@ npm i @raycas/torshield-express express
 
 The core package ships as a normal dependency of this adapter — you do not install `@raycas/torshield-core` separately for typical Express usage.
 
+## Local example app
+
+Use the maintained sample app for end-to-end local testing:
+
+```bash
+pnpm example:express
+```
+
+Or run only that workspace:
+
+```bash
+pnpm -C examples/express-app dev
+pnpm -C examples/express-app tunnel
+```
+
 ## Quick start
 
 Initialize **`initializeDetector`** once during bootstrap (before `app.listen`), then mount the middleware.
