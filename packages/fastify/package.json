@@ -20,7 +20,7 @@
 	},
 	"peerDependencies": {
 		"fastify": ">=5.8.5",
-		"fastify-plugin": ">=5.0.0"
+		"fastify-plugin": ">=5.1.0"
 	},
 	"scripts": {
 		"build": "tsdown && pnpm run build:types",
