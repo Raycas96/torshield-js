@@ -19,7 +19,7 @@
 		"@raycas/torshield-core": "workspace:*"
 	},
 	"peerDependencies": {
-		"fastify": ">=5.8.5",
+		"fastify": ">=5.12.1",
 		"fastify-plugin": ">=5.1.0"
 	},
 	"scripts": {
