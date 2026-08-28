@@ -34,6 +34,6 @@
 		"@nestjs/core": "^11.1.24",
 		"@nestjs/testing": "^11.1.24",
 		"vitest": "4.1.6",
-		"tsdown": "^0.22.0"
+		"tsdown": "^0.22.14"
 	}
 }
